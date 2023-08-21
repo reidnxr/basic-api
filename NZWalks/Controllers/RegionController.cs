@@ -20,12 +20,45 @@ namespace NZWalks.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllRegions")]
         public async Task<IActionResult> GetAllRegions()
         {
             var regions = await regionService.GetAllAsync();
 
             var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
             return Ok(regionsDTO);
+        }
+        [HttpGet]
+        [Route("GetRegion/{id:guid}")]
+        [ActionName("GetRegion")]
+        public async Task<IActionResult> GetRegion(Guid id)
+        {
+            var region = await regionService.GetRegionAsync(id);
+
+            if (region == null)
+            {
+                return NotFound();
+            }
+            var regionDTO = mapper.Map<Models.DTO.Region>(region);
+
+            return Ok(regionDTO);
+        }
+        [HttpPost]
+        [Route("AddRegion")]
+        public async Task<IActionResult> AddRegion(Models.DTO.AddMethod.Region region)
+        {
+            var newRegion = new Models.Region()
+            {
+                Area = region.Area,
+                Code = region.Code,
+                Lat = region.Lat,
+                Population = region.Population,
+                Long = region.Long,
+                Name = region.Name,
+            };
+            newRegion = await regionService.AddRegionAsync(newRegion);
+            var regionDTO = mapper.Map<Models.DTO.Region>(newRegion);
+            return CreatedAtAction(nameof(GetRegion), regionDTO);
         }
     }
 }
