@@ -8,5 +8,6 @@ namespace NZWalks.Services.IServices
         Task<IEnumerable<Region>> GetAllAsync();
         Task<Region> GetRegionAsync(Guid id);
         Task<Region> AddRegionAsync(Region region);
+        Task<Region> DeleteRegion(Guid id);
     }
 }

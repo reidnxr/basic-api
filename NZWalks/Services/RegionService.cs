@@ -23,6 +23,18 @@ namespace NZWalks.Services
             return region;
         }
 
+        public async Task<Region> DeleteRegion(Guid id)
+        {
+            Region region = await dbContext.Regions.Where(item => item.id == id).FirstOrDefaultAsync();
+            if (region == null)
+            {
+                return null;
+            }
+            dbContext.Regions.Remove(region);
+            await dbContext.SaveChangesAsync();
+            return region;
+        }
+
         public async Task<IEnumerable<Region>> GetAllAsync()
         {
             return await dbContext.Regions.ToListAsync();

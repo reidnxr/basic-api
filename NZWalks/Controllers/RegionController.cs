@@ -60,5 +60,16 @@ namespace NZWalks.Controllers
             var regionDTO = mapper.Map<Models.DTO.Region>(newRegion);
             return CreatedAtAction(nameof(GetRegion), regionDTO);
         }
+        [HttpDelete]
+        [Route("DeleteRegion")]
+        public async Task<IActionResult> DeleteRegion(Guid id)
+        {
+            Region region = await regionService.DeleteRegion(id);
+            if (region == null)
+            {
+                return NotFound();
+            }
+            return Ok(region);
+        }
     }
 }

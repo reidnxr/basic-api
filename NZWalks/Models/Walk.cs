@@ -7,7 +7,6 @@
         public double Length { get; set; }
 
         public Guid RegionId { get; set; }
-        public Guid WalkDificulty { get; set; }
 
         public Region Region { get; set; }
         public WalkDifficulty WalkDifficulty { get; set; }

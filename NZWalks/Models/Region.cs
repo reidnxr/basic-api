@@ -13,5 +13,4 @@
         public IEnumerable<Walk> Walks { get; set; }
         
     }
-}
-    
+}   
