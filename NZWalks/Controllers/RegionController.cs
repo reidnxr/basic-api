@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using NZWalks.Models;
 using NZWalks.Services.IServices;
 using System.Linq.Expressions;
@@ -69,7 +70,22 @@ namespace NZWalks.Controllers
             {
                 return NotFound();
             }
-            return Ok(region);
+            var regionDTO = mapper.Map<Models.DTO.Region>(region);
+            return Ok(regionDTO);
+        }
+
+        [HttpPatch]
+        [Route("UpdateRegion/{id:guid}")]
+        public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Region region)
+        {
+            var updatedRegion = mapper.Map<Region>(region);
+
+            
+            if (regionService.UpdateRegion(updatedRegion, id) == null)
+            {
+                return NotFound();
+            }
+            return Ok(mapper.Map<Models.DTO.Region>(region));
         }
     }
 }

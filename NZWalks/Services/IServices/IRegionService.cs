@@ -9,5 +9,6 @@ namespace NZWalks.Services.IServices
         Task<Region> GetRegionAsync(Guid id);
         Task<Region> AddRegionAsync(Region region);
         Task<Region> DeleteRegion(Guid id);
+        Task<Region> UpdateRegion(Region region, Guid id);
     }
 }

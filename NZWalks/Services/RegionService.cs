@@ -44,5 +44,25 @@ namespace NZWalks.Services
         {
             return await dbContext.Regions.Where(item => item.id == id).FirstOrDefaultAsync();
         }
+
+        public async Task<Region> UpdateRegion(Region region, Guid id)
+        {
+            var oldRegion = await dbContext.Regions.Where(item => item.id == id).FirstOrDefaultAsync();
+            if (oldRegion == null)
+            {
+                return null;
+            }
+
+            oldRegion.Population = region.Population;
+            oldRegion.Lat = region.Lat;
+            oldRegion.Code = region.Code;
+            oldRegion.Name = region.Name;
+            oldRegion.Area = region.Area;
+            oldRegion.Long = region.Long;
+
+            dbContext.Regions.Update(oldRegion);
+            await dbContext.SaveChangesAsync();
+            return region;
+        }
     }
 }

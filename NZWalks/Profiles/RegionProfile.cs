@@ -10,6 +10,18 @@ namespace NZWalks.Profiles
         {
             CreateMap<Models.Region, Models.DTO.Region>()
                 .ReverseMap();
+
+            CreateMap<Models.Region, Models.DTO.UpdateMethod.Region>()
+                .ReverseMap();
+
+            CreateMap<Models.DTO.Region, Models.Region>()
+                .ReverseMap();
+
+            CreateMap<Models.DTO.UpdateMethod.Region, Models.Region>()
+                .ReverseMap();
+
+            CreateMap<Models.DTO.UpdateMethod.Region, Models.DTO.Region>()
+                .ReverseMap();
         }
     }
 }
