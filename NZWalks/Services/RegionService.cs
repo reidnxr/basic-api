@@ -18,7 +18,7 @@ namespace NZWalks.Services
         public async Task<Models.Region> AddRegionAsync(Models.Region region)
         {
             region.id = Guid.NewGuid();
-            await dbContext.AddAsync(region);
+            await dbContext.Regions.AddAsync(region);
             dbContext.SaveChanges();
             return region;
         }
