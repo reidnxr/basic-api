@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using NZWalks.Models;
@@ -9,6 +10,7 @@ namespace NZWalks.Controllers
 {
     [ApiController]
     [Route("Regions")]
+    [Authorize]
     public class RegionController : Controller
     {
         private readonly IRegionService regionService;
