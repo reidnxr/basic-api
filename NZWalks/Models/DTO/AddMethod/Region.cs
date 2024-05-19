@@ -1,4 +1,4 @@
-﻿namespace NZWalks.Models.DTO.AddMethod
+﻿namespace Models.DTO.AddMethod
 {
     public class Region
     {

@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NZWalks.DataContext;
-using NZWalks.Models;
-using NZWalks.Services.IServices;
+﻿using DataContext;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using Services.IServices;
 
-namespace NZWalks.Services
+namespace Services
 {
     public class WalkDifficultyService : IWalkDifficultyService
     {
-        private readonly NZWalksDbContext dbContext;
+        private readonly WalksDbContext dbContext;
 
-        public WalkDifficultyService(NZWalksDbContext dbContext)
+        public WalkDifficultyService(WalksDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -53,7 +53,7 @@ namespace NZWalks.Services
         public async Task<WalkDifficulty> Delete(Guid id)
         {
             WalkDifficulty walkDifficulty = await dbContext.WalkDifficulty.FirstOrDefaultAsync(wd => wd.Id == id);
-            if(walkDifficulty == null)
+            if (walkDifficulty == null)
             {
                 return null;
             }

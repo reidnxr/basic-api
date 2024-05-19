@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "NZWalks": {
+    "Walks": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

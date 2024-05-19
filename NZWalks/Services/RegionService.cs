@@ -1,21 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NZWalks.DataContext;
-using NZWalks.Models;
-using NZWalks.Services.IServices;
-using System.Collections;
+﻿using DataContext;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using Services.IServices;
 
-namespace NZWalks.Services
+namespace Services
 {
     public class RegionService : IRegionService
     {
-        private readonly NZWalksDbContext dbContext;
+        private readonly WalksDbContext dbContext;
 
-        public RegionService(NZWalksDbContext dbContext)
+        public RegionService(WalksDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task<Models.Region> Add(Models.Region region)
+        public async Task<Region> Add(Region region)
         {
             region.id = Guid.NewGuid();
             await dbContext.Regions.AddAsync(region);

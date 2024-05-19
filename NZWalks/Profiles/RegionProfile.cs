@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
-using NZWalks.Models;
-using NZWalks.Models.DTO;
+using Models;
 
-namespace NZWalks.Profiles
+namespace Profiles
 {
     public class RegionProfile : Profile
     {
         public RegionProfile()
         {
-            CreateMap<Models.Region, Models.DTO.Region>()
+            CreateMap<Region, Models.DTO.Region>()
                 .ReverseMap();
 
-            CreateMap<Models.Region, Models.DTO.UpdateMethod.Region>()
+            CreateMap<Region, Models.DTO.UpdateMethod.Region>()
                 .ReverseMap();
 
-            CreateMap<Models.DTO.Region, Models.Region>()
+            CreateMap<Models.DTO.Region, Region>()
                 .ReverseMap();
 
-            CreateMap<Models.DTO.UpdateMethod.Region, Models.Region>()
+            CreateMap<Models.DTO.UpdateMethod.Region, Region>()
                 .ReverseMap();
 
             CreateMap<Models.DTO.UpdateMethod.Region, Models.DTO.Region>()

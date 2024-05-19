@@ -1,10 +1,10 @@
+using DataContext;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NZWalks.DataContext;
-using NZWalks.Services;
-using NZWalks.Services.IServices;
+using Services;
+using Services.IServices;
 using System.Text;
 
 internal class Program
@@ -22,14 +22,18 @@ internal class Program
         {
             options.CustomSchemaIds(type => type.ToString());
         });
-        builder.Services.AddDbContext<NZWalksDbContext>(options =>
+        builder.Services.AddDbContext<WalksDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnection")));
         builder.Services.AddFluentValidation(f => f.RegisterValidatorsFromAssemblyContaining<Program>());
         builder.Services.AddScoped<IRegionService, RegionService>();
         builder.Services.AddScoped<IWalkService, WalkService>();
         builder.Services.AddScoped<IWalkDifficultyService, WalkDifficultyService>();
+        builder.Services.AddScoped<ITokenService, TokenService>();
+
+        builder.Services.AddSingleton<IUserService, UserService>();
+
         builder.Services.AddAutoMapper(typeof(Program).Assembly);
-        /* builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options =>
                             options.TokenValidationParameters = new TokenValidationParameters
                             {
@@ -42,7 +46,6 @@ internal class Program
                                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
                             }
                         );
-        */
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

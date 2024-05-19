@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NZWalks.Models;
-using NZWalks.Services.IServices;
-using System.Runtime.InteropServices;
+using Models;
 
-namespace NZWalks.Controllers
+using Services.IServices;
+
+namespace Controllers
 {
     [ApiController]
     [Route("Walks")]
@@ -17,14 +18,15 @@ namespace NZWalks.Controllers
 
         public WalkController(IMapper mapper, IWalkService walkService, IWalkDifficultyService walkDifficultyService, IRegionService regionService)
         {
-            this._mapper = mapper;
-            this._walkDifficultyService = walkDifficultyService;
-            this._regionService = regionService;
-            this._walkService = walkService;
+            _mapper = mapper;
+            _walkDifficultyService = walkDifficultyService;
+            _regionService = regionService;
+            _walkService = walkService;
         }
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Roles = "Read")]
         public async Task<IActionResult> GetAll()
         {
             var walks = await _walkService.GetAll();
@@ -35,6 +37,7 @@ namespace NZWalks.Controllers
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("Get")]
+        [Authorize(Roles = "Read")]
         public async Task<IActionResult> Get(Guid id)
         {
             Walk walk = await _walkService.Get(id);
@@ -47,6 +50,7 @@ namespace NZWalks.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Write")]
         public async Task<IActionResult> Add([FromBody] Models.DTO.AddMethod.Walk walk)
         {
             bool valid = await AddIsValid(walk);
@@ -65,6 +69,7 @@ namespace NZWalks.Controllers
 
         [HttpPatch]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Write")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Walk walk)
         {
             bool valid = await UpdateIsValid(walk);
@@ -86,6 +91,7 @@ namespace NZWalks.Controllers
 
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Write")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             Walk walk = await _walkService.Delete(id);

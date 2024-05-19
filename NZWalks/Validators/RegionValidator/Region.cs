@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using Models.DTO.UpdateMethod;
 
-namespace NZWalks.Validators.RegionValidator
+namespace Validators.RegionValidator
 {
-    public class AddValidator : FluentValidation.AbstractValidator<Models.DTO.AddMethod.Region>
+    public class AddValidator : AbstractValidator<Models.DTO.AddMethod.Region>
     {
         public AddValidator()
         {
@@ -14,7 +15,7 @@ namespace NZWalks.Validators.RegionValidator
             RuleFor(r => r.Population).GreaterThanOrEqualTo(0);
         }
     }
-    public class UpdateValidator : FluentValidation.AbstractValidator<Models.DTO.UpdateMethod.Region>
+    public class UpdateValidator : AbstractValidator<Region>
     {
         public UpdateValidator()
         {

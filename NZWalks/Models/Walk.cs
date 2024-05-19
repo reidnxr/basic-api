@@ -1,4 +1,4 @@
-﻿namespace NZWalks.Models
+﻿namespace Models
 {
     public class Walk
     {

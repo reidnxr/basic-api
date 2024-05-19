@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using NZWalks.Models;
-using NZWalks.Services.IServices;
-using System.Net;
+using Models;
+using Services.IServices;
 
-namespace NZWalks.Controllers
+namespace Controllers
 {
     [ApiController]
     [Route("Regions")]
+    [Authorize]
     public class RegionController : Controller
     {
         private readonly IRegionService regionService;
@@ -17,11 +17,12 @@ namespace NZWalks.Controllers
         public RegionController(IRegionService regionService, IMapper mapper)
         {
             this.regionService = regionService;
-            this._mapper = mapper;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("GetAll")]
+        [Authorize(Roles = "Read")]
         public async Task<IActionResult> GetAll()
         {
             var regions = await regionService.GetAll();
@@ -29,10 +30,11 @@ namespace NZWalks.Controllers
             List<Models.DTO.Region> regionsDTO = _mapper.Map<List<Models.DTO.Region>>(regions);
             return Ok(regionsDTO);
         }
-        
+
         [HttpGet]
         [Route("{id:guid}")]
         [ActionName("Get")]
+        [Authorize(Roles = "Read")]
         public async Task<IActionResult> Get(Guid id)
         {
             Region region = await regionService.Get(id);
@@ -45,9 +47,9 @@ namespace NZWalks.Controllers
 
             return Ok(regionDTO);
         }
-        
+
         [HttpPost]
-        [Route("Add")]
+        [Authorize(Roles = "Write")]
         public async Task<IActionResult> Add(Models.DTO.AddMethod.Region region)
         {
             Region target = _mapper.Map<Region>(region);
@@ -56,10 +58,11 @@ namespace NZWalks.Controllers
             Models.DTO.Region regionDTO = _mapper.Map<Models.DTO.Region>(target);
             return CreatedAtAction(nameof(Add), regionDTO);
         }
-        
+
         [HttpDelete]
-        [Route("Delete")]
-        public async Task<IActionResult> Delete(Guid id)
+        [Route("{id:guid}")]
+        [Authorize(Roles = "Write")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             Region region = await regionService.DeleteRegion(id);
             if (region == null)
@@ -73,6 +76,7 @@ namespace NZWalks.Controllers
 
         [HttpPatch]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Write")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Region region)
         {
             Region target = _mapper.Map<Region>(region);

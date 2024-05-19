@@ -1,4 +1,4 @@
-﻿namespace NZWalks.Models.DTO.UpdateMethod
+﻿namespace Models.DTO.UpdateMethod
 {
     public class WalkDifficulty
     {

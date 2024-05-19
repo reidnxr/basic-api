@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
-using NZWalks.Models;
-using NZWalks.Models.DTO;
+using Models;
 
-namespace NZWalks.Profiles
+namespace Profiles
 {
     public class WalkProfile : Profile
     {
         public WalkProfile()
         {
-            CreateMap<Models.Walk, Models.DTO.Walk>()
+            CreateMap<Models.Walk, Walk>()
                 .ReverseMap();
 
             CreateMap<Models.Walk, Models.DTO.UpdateMethod.Walk>()
                 .ReverseMap();
-            CreateMap<Models.DTO.Walk, Models.DTO.UpdateMethod.Walk>()
+            CreateMap<Walk, Models.DTO.UpdateMethod.Walk>()
                 .ReverseMap();
         }
     }

@@ -1,7 +1,7 @@
-﻿using NZWalks.Models;
+﻿using Models;
 using System.Collections;
 
-namespace NZWalks.Services.IServices
+namespace Services.IServices
 {
     public interface IRegionService
     {

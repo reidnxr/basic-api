@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace NZWalks.Validators.WalkValidator
+namespace Validators.WalkValidator
 {
-    public class AddValidator : FluentValidation.AbstractValidator<Models.DTO.AddMethod.Walk>
+    public class AddValidator : AbstractValidator<Models.DTO.AddMethod.Walk>
     {
         public AddValidator()
         {

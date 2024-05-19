@@ -1,17 +1,15 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using DataContext;
 using Microsoft.EntityFrameworkCore;
-using NZWalks.DataContext;
-using NZWalks.Models;
-using NZWalks.Services.IServices;
+using Models;
+using Services.IServices;
 
-namespace NZWalks.Services
+namespace Services
 {
     public class WalkService : IWalkService
     {
-        private readonly NZWalksDbContext dbContext;
+        private readonly WalksDbContext dbContext;
 
-        public WalkService(NZWalksDbContext dbContext)
+        public WalkService(WalksDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
@@ -27,7 +25,7 @@ namespace NZWalks.Services
         public async Task<Walk> Delete(Guid id)
         {
             Walk walk = await dbContext.Walks.FirstOrDefaultAsync(w => w.Id == id);
-            if(walk == null)
+            if (walk == null)
             {
                 return null;
             }
@@ -57,7 +55,7 @@ namespace NZWalks.Services
         public async Task<Walk> Update(Walk walk, Guid id)
         {
             Walk target = await dbContext.Walks.FirstOrDefaultAsync(w => w.Id == id);
-            if(target == null)
+            if (target == null)
             {
                 return null;
             }

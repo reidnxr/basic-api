@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NZWalks.Models;
+using Models;
 using System.CodeDom;
 
-namespace NZWalks.DataContext
+namespace DataContext
 {
-    public class NZWalksDbContext : DbContext   
+    public class WalksDbContext : DbContext
     {
-        public NZWalksDbContext(DbContextOptions<NZWalksDbContext> options): base(options)
+        public WalksDbContext(DbContextOptions<WalksDbContext> options) : base(options)
         {
 
         }

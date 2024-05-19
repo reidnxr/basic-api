@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NZWalks.Models;
+using Models;
 
-namespace NZWalks.Services.IServices
+namespace Services.IServices
 {
     public interface IWalkService
     {

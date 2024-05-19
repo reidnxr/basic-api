@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace NZWalks.Profiles
+namespace Profiles
 {
     public class WalkDifficultyProfile : Profile
     {

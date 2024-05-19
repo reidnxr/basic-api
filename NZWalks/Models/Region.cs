@@ -1,4 +1,4 @@
-﻿namespace NZWalks.Models
+﻿namespace Models
 {
     public class Region
     {
@@ -11,6 +11,6 @@
         public long Population { get; set; }
 
         public IEnumerable<Walk> Walks { get; set; }
-        
+
     }
-}   
+}
