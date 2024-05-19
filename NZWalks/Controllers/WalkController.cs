@@ -22,31 +22,73 @@ namespace NZWalks.Controllers
         [HttpGet]
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
-        { 
+        {
             var walks = await _walkService.GetAll();
-            return Ok(_mapper.Map<List<Models.DTO.Walk>>(walks));
+            List<Models.DTO.Walk> walksDTO = _mapper.Map<List<Models.DTO.Walk>>(walks);
+            return Ok(walksDTO);
         }
 
         [HttpGet]
-        [Route("Get/{id:guid}")]
+        [Route("{id:guid}")]
         [ActionName("Get")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var walk = await _walkService.Get(id);
-            if(walk == null)
+            Walk walk = await _walkService.Get(id);
+            if (walk == null)
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<Models.DTO.Walk>(walk));
+            Models.DTO.Walk walkDTO = _mapper.Map<Models.DTO.Walk>(walk);
+            return Ok(walkDTO);
         }
+
         [HttpPost]
-        [Route("Add")]
         public async Task<IActionResult> Add([FromBody] Models.DTO.AddMethod.Walk walk)
         {
-            var newWalk = _mapper.Map<Walk>(walk);
+            Walk newWalk = _mapper.Map<Walk>(walk);
             newWalk = await _walkService.Add(newWalk);
 
-            return CreatedAtAction(nameof(Get), _mapper.Map<Models.DTO.Walk>(newWalk));
+            Models.DTO.Walk walkDTO = _mapper.Map<Models.DTO.Walk>(newWalk);
+
+            return CreatedAtAction(nameof(Get), walkDTO);
         }
+
+        [HttpPatch]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Walk walk)
+        {
+            Walk target = _mapper.Map<Walk>(walk);
+            target = await _walkService.Update(target, id);
+
+            if (target == null)
+            {
+                return NotFound();
+            }
+            Models.DTO.Walk walkDTO = _mapper.Map<Models.DTO.Walk>(target);
+            return Ok(walkDTO);
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            Walk walk = await _walkService.Delete(id);
+            if (walk == null)
+            {
+                return NotFound();
+            }
+            Models.DTO.Walk walkDTO = _mapper.Map<Models.DTO.Walk>(walk);
+
+            return Ok(walkDTO);
+        }
+
+        #region Private Methods
+        public bool IsValid(Models.DTO.AddMethod.Walk walk)
+        {
+            bool valid = true;
+
+            return valid;
+        }
+        #endregion
     }
 }

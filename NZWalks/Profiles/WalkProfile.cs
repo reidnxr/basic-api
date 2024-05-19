@@ -13,14 +13,7 @@ namespace NZWalks.Profiles
 
             CreateMap<Models.Walk, Models.DTO.UpdateMethod.Walk>()
                 .ReverseMap();
-
-            CreateMap<Models.DTO.Walk, Models.Walk>()
-                .ReverseMap();
-
-            CreateMap<Models.DTO.UpdateMethod.Walk, Models.Walk>()
-                .ReverseMap();
-
-            CreateMap<Models.DTO.UpdateMethod.Walk, Models.DTO.Walk>()
+            CreateMap<Models.DTO.Walk, Models.DTO.UpdateMethod.Walk>()
                 .ReverseMap();
         }
     }

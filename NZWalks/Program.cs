@@ -21,8 +21,9 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnection")));
 builder.Services.AddScoped<IRegionService, RegionService>();
 builder.Services.AddScoped<IWalkService, WalkService>();
+builder.Services.AddScoped<IWalkDifficultyService, WalkDifficultyService>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+/* builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -35,7 +36,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
                     }
                 );
-
+*/
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

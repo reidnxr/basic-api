@@ -15,7 +15,7 @@ namespace NZWalks.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<Models.Region> AddRegionAsync(Models.Region region)
+        public async Task<Models.Region> Add(Models.Region region)
         {
             region.id = Guid.NewGuid();
             await dbContext.Regions.AddAsync(region);
@@ -35,12 +35,12 @@ namespace NZWalks.Services
             return region;
         }
 
-        public async Task<IEnumerable<Region>> GetAllAsync()
+        public async Task<IEnumerable<Region>> GetAll()
         {
             return await dbContext.Regions.ToListAsync();
         }
 
-        public async Task<Region> GetRegionAsync(Guid id)
+        public async Task<Region> Get(Guid id)
         {
             return await dbContext.Regions.Where(item => item.id == id).FirstOrDefaultAsync();
         }

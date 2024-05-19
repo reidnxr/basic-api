@@ -8,5 +8,7 @@ namespace NZWalks.Services.IServices
         Task<IEnumerable<Walk>> GetAll();
         Task<Walk> Get(Guid id);
         Task<Walk> Add(Walk walk);
+        Task<Walk> Update(Walk walk, Guid id);
+        Task<Walk> Delete(Guid id);
     }
 }

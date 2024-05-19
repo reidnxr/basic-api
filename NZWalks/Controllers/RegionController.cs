@@ -1,93 +1,202 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using NZWalks.Models;
 using NZWalks.Services.IServices;
-using System.Linq.Expressions;
+using System.Net;
 
 namespace NZWalks.Controllers
 {
     [ApiController]
     [Route("Regions")]
-    [Authorize]
     public class RegionController : Controller
     {
         private readonly IRegionService regionService;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
 
         public RegionController(IRegionService regionService, IMapper mapper)
         {
             this.regionService = regionService;
-            this.mapper = mapper;
+            this._mapper = mapper;
         }
 
         [HttpGet]
-        [Route("GetAllRegions")]
-        public async Task<IActionResult> GetAllRegions()
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
-            var regions = await regionService.GetAllAsync();
+            var regions = await regionService.GetAll();
 
-            var regionsDTO = mapper.Map<List<Models.DTO.Region>>(regions);
+            List<Models.DTO.Region> regionsDTO = _mapper.Map<List<Models.DTO.Region>>(regions);
             return Ok(regionsDTO);
         }
+        
         [HttpGet]
-        [Route("GetRegion/{id:guid}")]
-        [ActionName("GetRegion")]
-        public async Task<IActionResult> GetRegion(Guid id)
+        [Route("{id:guid}")]
+        [ActionName("Get")]
+        public async Task<IActionResult> Get(Guid id)
         {
-            var region = await regionService.GetRegionAsync(id);
+            Region region = await regionService.Get(id);
 
             if (region == null)
             {
                 return NotFound();
             }
-            var regionDTO = mapper.Map<Models.DTO.Region>(region);
+            Models.DTO.Region regionDTO = _mapper.Map<Models.DTO.Region>(region);
 
             return Ok(regionDTO);
         }
+        
         [HttpPost]
-        [Route("AddRegion")]
-        public async Task<IActionResult> AddRegion(Models.DTO.AddMethod.Region region)
+        [Route("Add")]
+        public async Task<IActionResult> Add(Models.DTO.AddMethod.Region region)
         {
-            var newRegion = new Models.Region()
+
+            bool valid = IsValid(region);
+            if (!valid)
             {
-                Area = region.Area,
-                Code = region.Code,
-                Lat = region.Lat,
-                Population = region.Population,
-                Long = region.Long,
-                Name = region.Name,
-            };
-            newRegion = await regionService.AddRegionAsync(newRegion);
-            var regionDTO = mapper.Map<Models.DTO.Region>(newRegion);
-            return CreatedAtAction(nameof(GetRegion), regionDTO);
+                return BadRequest(ModelState);
+            }
+
+            Region target = _mapper.Map<Region>(region);
+            target = await regionService.Add(target);
+
+            Models.DTO.Region regionDTO = _mapper.Map<Models.DTO.Region>(target);
+            return CreatedAtAction(nameof(Add), regionDTO);
         }
+        
         [HttpDelete]
-        [Route("DeleteRegion")]
-        public async Task<IActionResult> DeleteRegion(Guid id)
+        [Route("Delete")]
+        public async Task<IActionResult> Delete(Guid id)
         {
             Region region = await regionService.DeleteRegion(id);
             if (region == null)
             {
                 return NotFound();
             }
-            var regionDTO = mapper.Map<Models.DTO.Region>(region);
+
+            Models.DTO.Region regionDTO = _mapper.Map<Models.DTO.Region>(region);
             return Ok(regionDTO);
         }
 
         [HttpPatch]
-        [Route("UpdateRegion/{id:guid}")]
-        public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Region region)
+        [Route("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Region region)
         {
-            var updatedRegion = mapper.Map<Region>(region);
+            bool valid = IsValid(region);
 
-            
-            if (regionService.UpdateRegion(updatedRegion, id) == null)
+            if (!valid)
+            {
+                return BadRequest(ModelState);   
+            }
+
+            Region target = _mapper.Map<Region>(region);
+            target = await regionService.UpdateRegion(target, id);
+            if (target == null)
             {
                 return NotFound();
             }
-            return Ok(mapper.Map<Models.DTO.Region>(region));
+            return Ok(_mapper.Map<Models.DTO.Region>(region));
         }
+
+        #region Private Methods
+
+        private bool IsValid(Models.DTO.AddMethod.Region region)
+        {
+            bool valid = true;
+
+            if(region == null)
+            {
+                ModelState.AddModelError(nameof(region), $"Region cannot be null.");
+                valid = false;
+                return valid;
+            }
+
+            if (string.IsNullOrWhiteSpace(region.Code))
+            {
+                ModelState.AddModelError(nameof(region.Code), $"{nameof(region.Code)} cannot be null or empty or white space.");
+            }
+
+            if (string.IsNullOrWhiteSpace(region.Name))
+            {
+                ModelState.AddModelError(nameof(region.Name), $"{nameof(region.Name)} cannot be null or empty or white space.");
+            }
+
+            if (region.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Area), $"{nameof(region.Area)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Lat <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Lat), $"{nameof(region.Lat)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Long <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Long), $"{nameof(region.Long)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Population < 0)
+            {
+                ModelState.AddModelError(nameof(region.Population), $"{nameof(region.Population)} cannot be less than to 0.");
+            }
+
+            if(ModelState.ErrorCount > 0)
+            {
+                valid = false;
+            }
+
+            return valid;
+        }
+        private bool IsValid(Models.DTO.UpdateMethod.Region region)
+        {
+            bool valid = true;
+
+            if (region == null)
+            {
+                ModelState.AddModelError(nameof(region), $"Region cannot be null.");
+                valid = false;
+                return valid;
+            }
+
+            if (string.IsNullOrWhiteSpace(region.Code))
+            {
+                ModelState.AddModelError(nameof(region.Code), $"{nameof(region.Code)} cannot be null or empty or white space.");
+            }
+
+            if (string.IsNullOrWhiteSpace(region.Name))
+            {
+                ModelState.AddModelError(nameof(region.Name), $"{nameof(region.Name)} cannot be null or empty or white space.");
+            }
+
+            if (region.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Area), $"{nameof(region.Area)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Lat <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Lat), $"{nameof(region.Lat)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Long <= 0)
+            {
+                ModelState.AddModelError(nameof(region.Long), $"{nameof(region.Long)} cannot be less than or equal to 0.");
+            }
+
+            if (region.Population < 0)
+            {
+                ModelState.AddModelError(nameof(region.Population), $"{nameof(region.Population)} cannot be less than to 0.");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        #endregion
     }
 }
