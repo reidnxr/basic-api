@@ -8,6 +8,7 @@ namespace Controllers
 {
     [ApiController]
     [Route("WalkDifficulty")]
+    [Authorize]
     public class WalkDifficultyController : Controller
     {
         private readonly IMapper _mapper;
