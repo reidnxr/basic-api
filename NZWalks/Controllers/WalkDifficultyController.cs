@@ -47,12 +47,6 @@ namespace NZWalks.Controllers
         [ActionName("Add")]
         public async Task<IActionResult> Add([FromBody] Models.DTO.AddMethod.WalkDifficulty walkDifficulty)
         {
-            bool valid = IsValid(walkDifficulty);
-            if (!valid)
-            {
-                return BadRequest(ModelState);
-            }
-
             WalkDifficulty target = _mapper.Map<WalkDifficulty>(walkDifficulty);
             target = await _walkDifficultyService.Add(target);
 
@@ -66,12 +60,6 @@ namespace NZWalks.Controllers
         [ActionName("Update")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.WalkDifficulty walkDifficulty)
         {
-            bool valid = IsValid(walkDifficulty);
-            if (!valid)
-            {
-                return BadRequest(ModelState);
-            }
-
             WalkDifficulty target = _mapper.Map<WalkDifficulty>(walkDifficulty);
             target = await _walkDifficultyService.Update(id, target);
             
@@ -96,56 +84,5 @@ namespace NZWalks.Controllers
             return Ok(walkDifficulty);
         }
 
-        #region Private Methods
-
-        public bool IsValid(Models.DTO.AddMethod.WalkDifficulty walkDifficulty)
-        {
-            bool valid = true;
-
-            if (walkDifficulty == null)
-            {
-                ModelState.AddModelError(nameof(walkDifficulty), $"RalkDifficulty cannot be null.");
-                valid = false;
-                return valid;
-            }
-
-            if (string.IsNullOrWhiteSpace(walkDifficulty.Code))
-            {
-                ModelState.AddModelError(nameof(walkDifficulty.Code), $"{nameof(walkDifficulty.Code)} cannot be null or empty or white space.");
-            }
-
-            if (ModelState.ErrorCount > 0)
-            {
-                valid = false;
-            }
-
-            return valid;
-        }
-
-        public bool IsValid(Models.DTO.UpdateMethod.WalkDifficulty walkDifficulty)
-        {
-            bool valid = true;
-
-            if (walkDifficulty == null)
-            {
-                ModelState.AddModelError(nameof(walkDifficulty), $"RalkDifficulty cannot be null.");
-                valid = false;
-                return valid;
-            }
-
-            if (string.IsNullOrWhiteSpace(walkDifficulty.Code))
-            {
-                ModelState.AddModelError(nameof(walkDifficulty.Code), $"{nameof(walkDifficulty.Code)} cannot be null or empty or white space.");
-            }
-
-            if (ModelState.ErrorCount > 0)
-            {
-                valid = false;
-            }
-
-            return valid;
-        }
-
-        #endregion
     }
 }

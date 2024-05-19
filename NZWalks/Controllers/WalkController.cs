@@ -49,7 +49,7 @@ namespace NZWalks.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] Models.DTO.AddMethod.Walk walk)
         {
-            bool valid = await IsValid(walk);
+            bool valid = await AddIsValid(walk);
             if (!valid)
             {
                 return BadRequest(ModelState);
@@ -67,7 +67,7 @@ namespace NZWalks.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] Models.DTO.UpdateMethod.Walk walk)
         {
-            bool valid = await IsValid(walk);
+            bool valid = await UpdateIsValid(walk);
             if (!valid)
             {
                 return BadRequest(ModelState);
@@ -100,7 +100,7 @@ namespace NZWalks.Controllers
 
         #region Private Methods
 
-        public async Task<bool> IsValid(Models.DTO.AddMethod.Walk walk)
+        private async Task<bool> AddIsValid(Models.DTO.AddMethod.Walk walk)
         {
             bool valid = true;
 
@@ -111,15 +111,6 @@ namespace NZWalks.Controllers
                 return valid;
             }
 
-            if (string.IsNullOrWhiteSpace(walk.Name))
-            {
-                ModelState.AddModelError(nameof(walk.Name), $"{nameof(walk.Name)} cannot be null or empty or white space.");
-            }
-
-            if (walk.Length <= 0)
-            {
-                ModelState.AddModelError(nameof(walk.Length), $"{nameof(walk.Length)} cannot be less than or equal to 0.");
-            }
             Region region = await _regionService.Get(walk.RegionId);
             if (region == null)
             {
@@ -141,7 +132,7 @@ namespace NZWalks.Controllers
             return valid;
         }
 
-        public async Task<bool> IsValid(Models.DTO.UpdateMethod.Walk walk)
+        private async Task<bool> UpdateIsValid(Models.DTO.UpdateMethod.Walk walk)
         {
             bool valid = true;
 
@@ -152,15 +143,6 @@ namespace NZWalks.Controllers
                 return valid;
             }
 
-            if (string.IsNullOrWhiteSpace(walk.Name))
-            {
-                ModelState.AddModelError(nameof(walk.Name), $"{nameof(walk.Name)} cannot be null or empty or white space.");
-            }
-
-            if (walk.Length <= 0)
-            {
-                ModelState.AddModelError(nameof(walk.Length), $"{nameof(walk.Length)} cannot be less than or equal to 0.");
-            }
             Region region = await _regionService.Get(walk.RegionId);
             if (region == null)
             {
@@ -172,7 +154,6 @@ namespace NZWalks.Controllers
             {
                 ModelState.AddModelError(nameof(walk.WalkDifficultyId), $"{nameof(walk.WalkDifficultyId)} is invalid.");
             }
-
 
             if (ModelState.ErrorCount > 0)
             {
