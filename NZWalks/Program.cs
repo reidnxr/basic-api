@@ -50,8 +50,7 @@ internal class Program
         builder.Services.AddScoped<IWalkService, WalkService>();
         builder.Services.AddScoped<IWalkDifficultyService, WalkDifficultyService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
-
-        builder.Services.AddSingleton<IUserService, UserService>();
+        builder.Services.AddScoped<IUserService, UserService>();
 
         builder.Services.AddAutoMapper(typeof(Program).Assembly);
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
